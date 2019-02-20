@@ -22,7 +22,7 @@ const KEY_8 = 56;
 const KEY_9 = 57;
 
 var input = {
-    mouse: { x: 0, y: 0 },
+    mouse: { x: 0, y: 0 , pressed: false},
     keyboard: {
         keyup: {},
         keypressed: {}
@@ -35,6 +35,9 @@ var input = {
     },
     isKeyUp: function (keycode) {
         return this.keyboard.keyup[keycode];
+    },
+    isMousePressed: function(){
+        return this.mouse.pressed;
     },
     update: function() {
         for (var property in this.keyboard.keyup) {
@@ -80,6 +83,8 @@ function SetupMouseEvents ()
     canvas.addEventListener("mousedown", MouseDown, false);
     // mouse move event
     canvas.addEventListener("mousemove", MouseMove, false);
+    // mouse up event
+    canvas.addEventListener("mouseup", MouseUp, false);
 }
 
 function MouseDown (event)
@@ -87,7 +92,18 @@ function MouseDown (event)
     var rect = canvas.getBoundingClientRect();
     var clickX = event.clientX - rect.left;
     var clickY = event.clientY - rect.top;
+
+    input.mouse.pressed = true             ;
     //console.log("MouseDown: " + "X=" + clickX + ", Y=" + clickY);
+}
+
+function MouseUp(event)
+{
+    var rect = canvas.getBoundingClientRect();
+    var clickX = event.clientX - rect.left;
+    var clickY = event.clientY - rect.top;
+
+    input.mouse.pressed = false;
 }
 
 function MouseMove (event)

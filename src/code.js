@@ -15,6 +15,8 @@ var time = 0,
 
 var gamePaused = false;
 
+var gameMng = null;
+
 var playerShip;
 var stars;
 var invaders;
@@ -74,6 +76,7 @@ function Start ()
 {
     console.log("Start");
 
+  
     // create the player ship
     playerShip.Start();
 
@@ -101,6 +104,9 @@ function Start ()
         invader.Start();
         invaders.push(invader);
     }
+
+      // Create gamemanager
+      gameMng = new GameManager();
 }
 
 function Loop ()
@@ -160,28 +166,35 @@ function Update (deltaTime)
         invader.Update(deltaTime);
     });
     
-    // check for star-invader collisions
-    actualCollisions = 0;
+    
+    
+    
     // first point inside circle then inside polygon
-    for (var i = 0; i < stars.length; i++)
+    for (let i = 0; i < playerShip.bulletPool.bulletArray.length; ++i)
     {
-        // reset the onCollision state of the star
-        stars[i].onCollision = false;
+        let bullet = playerShip.bulletPool.bulletArray[i];
         
-        for (var j = 0; j < invaders.length; j++)
+        if(bullet.active)
         {
-            // point inside circle collision
-            if (PointInsideCircle(invaders[j].position, invaders[j].radius2, stars[i].position))
+            for (let j = 0; j < invaders.length; ++j)
             {
-                // point inside polygon collision
-                if (CheckCollisionPolygon(stars[i].position, invaders[j].collider.transformedPolygon))
+                // point inside circle collision
+                if (PointInsideCircle(invaders[j].position, invaders[j].radius2, bullet.position))
                 {
-                    stars[i].onCollision = true;
-                    actualCollisions++;
+                    // point inside polygon collision
+                    if (CheckCollisionPolygon(bullet.position, invaders[j].collider.transformedPolygon))
+                    {
+                        // kill the enemy
+                        invaders.splice(j,1);
+                        --j;
+                        playerShip.bulletPool.DisableBullet(bullet);
+                    }
                 }
             }
         }
     }
+
+    gameMng.Update(deltaTime);
 }
 
 function Draw ()

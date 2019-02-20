@@ -14,8 +14,9 @@ playerShip = {
     shotCadency: 0.12, // 1/0.2 shot per second
     shotCadencyAux: 0,
     cannonPosition: null,
+    cannonPositionTransformed: null,
 
-    laserSfx: null,
+    laserSfx: null,        
 
     bulletPool: {
         bulletArray: [],
@@ -105,8 +106,13 @@ playerShip = {
 
         // set the cannon position
         this.cannonPosition = {
-            x: this.img.width / 2 - bulletImg.width / 2,
-            y: 0
+            x: 0,
+            y: -this.img.width / 2 + bulletImg.width / 2
+        }
+
+        cannonPositionTransformed = {
+            x: 0,
+            y: -this.img.width / 2 + bulletImg.width / 2
         }
 
         // init the bullet pool
@@ -179,14 +185,22 @@ playerShip = {
         };
         this.rotation = Math.atan2(mouseShipVector.y, mouseShipVector.x);
 
-        if (input.isKeyPressed(KEY_SPACE) && this.shotCadencyAux <= 0)
+        // cannon rotation
+        this.cannonPositionTransformed = rotate (this.position, {x: this.position.x + 
+        this.cannonPosition.x, y: this.position.y + this.cannonPosition.y}, 
+        -this.rotation -Math.PI / 2); 
+
+        // shooting
+        if ((input.isKeyPressed(KEY_SPACE) || input.isMousePressed()) && this.shotCadencyAux <= 0)
         {
             var bullet = this.bulletPool.EnableBullet();
-            bullet.position.x = this.position.x + this.cannonPosition.x;
-            bullet.position.y = this.position.y + this.cannonPosition.y;
+            bullet.position.x = this.cannonPositionTransformed.x;
+            bullet.position.y = this.cannonPositionTransformed.y;
             bullet.rotation = this.rotation;
-            bullet.velocity = 1000;
-            bullet.active = true;
+            bullet.velocity = 1000;   
+            bullet.active = true;       
+                 
+            
 
             // play the sfx
             this.laserSfx.currentTime = 0.22;
@@ -234,16 +248,29 @@ function createBullet()
     this.rotation = 0;
     this.velocity = 0;
     this.damage = 0;
-    this.sprite = null;
-
-    this.Update = function(deltaTime)
-    {
-        this.position.x += this.velocity * deltaTime * Math.cos(this.rotation);
-        this.position.y += this.velocity * deltaTime * Math.sin(this.rotation);
-    };
-
-    this.Draw = function(ctx)
-    {
-        ctx.drawImage(this.sprite, this.position.x, this.position.y);
-    };
+    this.sprite = null;    
+    this.spriteHalfWidth = 0;
+    this.spriteHalfHeight = 0;
 }
+
+createBullet.prototype.Start = function()
+{
+    this.sprite = bulletImg;
+    this.spriteHalfHeight = this.sprite.height / 2;
+    this.spriteHalfWidth = this.sprite.width / 2;
+}
+
+createBullet.prototype.Update = function(deltaTime)
+{
+    this.position.x += this.velocity * deltaTime * Math.cos(this.rotation);
+    this.position.y += this.velocity * deltaTime * Math.sin(this.rotation);
+};
+
+createBullet.prototype.Draw = function(ctx)
+{   
+    ctx.save();
+    ctx.translate(this.position.x, this.position.y);
+    ctx.rotate(this.rotation + Math.PI / 2);
+    ctx.drawImage(this.sprite, this.spriteHalfWidth, -this.spriteHalfHeight);
+    ctx.restore();
+};
