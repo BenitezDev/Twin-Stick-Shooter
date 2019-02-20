@@ -22,7 +22,11 @@ const KEY_8 = 56;
 const KEY_9 = 57;
 
 var input = {
-    mouse: { x: 0, y: 0 , pressed: false},
+    mouse: {
+        x: 0,
+        y: 0,
+        pressed: false
+    },
     keyboard: {
         keyup: {},
         keypressed: {}
@@ -36,7 +40,7 @@ var input = {
     isKeyUp: function (keycode) {
         return this.keyboard.keyup[keycode];
     },
-    isMousePressed: function(){
+    isMousePressed: function () {
         return this.mouse.pressed;
     },
     update: function() {
@@ -93,17 +97,20 @@ function MouseDown (event)
     var clickX = event.clientX - rect.left;
     var clickY = event.clientY - rect.top;
 
-    input.mouse.pressed = true             ;
-    //console.log("MouseDown: " + "X=" + clickX + ", Y=" + clickY);
+    input.mouse.pressed = true;
+
+    console.log("MouseDown: " + "X=" + clickX + ", Y=" + clickY);
 }
 
-function MouseUp(event)
+function MouseUp (event)
 {
     var rect = canvas.getBoundingClientRect();
     var clickX = event.clientX - rect.left;
     var clickY = event.clientY - rect.top;
 
     input.mouse.pressed = false;
+
+    console.log("MouseUp: " + "X=" + clickX + ", Y=" + clickY);
 }
 
 function MouseMove (event)

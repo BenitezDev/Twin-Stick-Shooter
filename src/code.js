@@ -1,5 +1,6 @@
 
 const PI2 = Math.PI * 2;
+const PIH = Math.PI * 0.5;
 
 var canvas;
 var ctx;
@@ -15,13 +16,12 @@ var time = 0,
 
 var gamePaused = false;
 
-var gameMng = null;
-
+var gameMng;
 var playerShip;
 var stars;
 var invaders;
 
-var playerShipImg, invaderImg, bulletImg;
+var playerShipImg, invaderImg, invaderImg2, bulletImg;
 
 var actualCollisions = 0;
 
@@ -61,11 +61,17 @@ if (canvas)
                 invaderImg = new Image();
                 invaderImg.src = "./assets/invader1.png";
                 invaderImg.onload = function () {
-                    // start the game
-                    Start();
 
-                    //setInterval(Loop, deltaTime);
-                    Loop();
+                    // load the invader2 image
+                    invaderImg2 = new Image();
+                    invaderImg2.src = "./assets/ship3.png";
+                    invaderImg2.onload = function () {
+                        // start the game
+                        Start();
+
+                        //setInterval(Loop, deltaTime);
+                        Loop();
+                    }
                 }
             }
         }
@@ -76,7 +82,6 @@ function Start ()
 {
     console.log("Start");
 
-  
     // create the player ship
     playerShip.Start();
 
@@ -105,8 +110,8 @@ function Start ()
         invaders.push(invader);
     }
 
-      // Create gamemanager
-      gameMng = new GameManager();
+    // create the game manager
+    gameMng = new GameManager();
 }
 
 function Loop ()
@@ -166,17 +171,35 @@ function Update (deltaTime)
         invader.Update(deltaTime);
     });
     
-    
-    
-    
+    // check for star-invader collisions
+    /*actualCollisions = 0;
     // first point inside circle then inside polygon
-    for (let i = 0; i < playerShip.bulletPool.bulletArray.length; ++i)
+    for (var i = 0; i < stars.length; i++)
+    {
+        // reset the onCollision state of the star
+        stars[i].onCollision = false;
+        
+        for (var j = 0; j < invaders.length; j++)
+        {
+            // point inside circle collision
+            if (PointInsideCircle(invaders[j].position, invaders[j].radius2, stars[i].position))
+            {
+                // point inside polygon collision
+                if (CheckCollisionPolygon(stars[i].position, invaders[j].collider.transformedPolygon))
+                {
+                    stars[i].onCollision = true;
+                    actualCollisions++;
+                }
+            }
+        }
+    }*/
+    // first point inside circle then inside polygon
+    for (let i = 0; i < playerShip.bulletPool.bulletArray.length; i++)
     {
         let bullet = playerShip.bulletPool.bulletArray[i];
-        
-        if(bullet.active)
+        if (bullet.active)
         {
-            for (let j = 0; j < invaders.length; ++j)
+            for (let j = 0; j < invaders.length; j++)
             {
                 // point inside circle collision
                 if (PointInsideCircle(invaders[j].position, invaders[j].radius2, bullet.position))
@@ -185,8 +208,9 @@ function Update (deltaTime)
                     if (CheckCollisionPolygon(bullet.position, invaders[j].collider.transformedPolygon))
                     {
                         // kill the enemy
-                        invaders.splice(j,1);
-                        --j;
+                        invaders.splice(j, 1);
+                        j--;
+                        // disable the bullet
                         playerShip.bulletPool.DisableBullet(bullet);
                     }
                 }

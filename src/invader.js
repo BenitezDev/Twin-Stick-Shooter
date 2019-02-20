@@ -1,49 +1,53 @@
 
-function Invader (img, initialPosition, initialRotation, velocity, rotVelocity)
+class Invader
 {
-    this.img = img;
-    this.position = {
-        x: initialPosition.x,
-        y: initialPosition.y
-    };
-    this.scale = 0.5;
-    this.rotation = 0;
-    this.initialRotation = initialRotation;
-    this.velocity = velocity;
-    this.rotVelocity = rotVelocity;
+    constructor(img, initialPosition, initialRotation, velocity, rotVelocity)
+    {
+        this.img = img;
+        this.position = {
+            x: initialPosition.x,
+            y: initialPosition.y
+        };
+        this.scale = 0.5;
+        this.rotation = 0;
+        this.initialRotation = initialRotation;
+        this.velocity = velocity;
+        this.rotVelocity = rotVelocity;
+    
+        this.imgHalfWidth = img.width / 2;
+        this.imgHalfHeight = img.height / 2;
+    
+        this.minDistance = (this.imgHalfWidth + this.imgHalfHeight) * this.scale;
+    
+        this.radius = 0;
+        this.radius2 = 0;
+    
+        this.collider = {
+            originalPolygon : [
+                {x: 8, y: -10},
+                {x: 14, y: -8},
+                {x: 14, y: 4},
+                {x: 8, y: 10},
+                {x: -8, y: 10},
+                {x: -14, y: 4},
+                {x: -14, y: -8},
+                {x: -8, y: -10},
+            ],
+            transformedPolygon : [
+                {x: 8, y: -10},
+                {x: 14, y: -8},
+                {x: 14, y: 4},
+                {x: 8, y: 10},
+                {x: -8, y: 10},
+                {x: -14, y: 4},
+                {x: -14, y: -8},
+                {x: -8, y: -10},
+            ]
+        };
+    }    
 
-    this.imgHalfWidth = img.width / 2;
-    this.imgHalfHeight = img.height / 2;
-
-    this.minDistance = (this.imgHalfWidth + this.imgHalfHeight) * this.scale;
-
-    this.radius = 0;
-    this.radius2 = 0;
-
-    this.collider = {
-        originalPolygon : [
-            {x: 8, y: -10},
-            {x: 14, y: -8},
-            {x: 14, y: 4},
-            {x: 8, y: 10},
-            {x: -8, y: 10},
-            {x: -14, y: 4},
-            {x: -14, y: -8},
-            {x: -8, y: -10},
-        ],
-        transformedPolygon : [
-            {x: 8, y: -10},
-            {x: 14, y: -8},
-            {x: 14, y: 4},
-            {x: 8, y: 10},
-            {x: -8, y: 10},
-            {x: -14, y: 4},
-            {x: -14, y: -8},
-            {x: -8, y: -10},
-        ]
-    };
-
-    this.Start = function () {
+    Start()
+    {
         this.rotation = this.initialRotation;
         
         this.radius = 20;//Math.sqrt((this.imgHalfWidth * this.imgHalfWidth) + (this.imgHalfHeight * this.imgHalfHeight));
@@ -51,7 +55,8 @@ function Invader (img, initialPosition, initialRotation, velocity, rotVelocity)
         this.radius2 = this.radius * this.radius;
     }
 
-    this.Update = function (deltaTime) {
+    Update(deltaTime)
+    {
         // movement towars its rotation
         var movement = {
             x: Math.cos(this.rotation) * this.velocity,
@@ -104,7 +109,8 @@ function Invader (img, initialPosition, initialRotation, velocity, rotVelocity)
         }
     }
 
-    this.Draw = function (ctx) {
+    Draw(ctx)
+    {
         ctx.save();
 
         ctx.translate(this.position.x, this.position.y);

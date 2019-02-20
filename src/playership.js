@@ -16,7 +16,7 @@ playerShip = {
     cannonPosition: null,
     cannonPositionTransformed: null,
 
-    laserSfx: null,        
+    laserSfx: null,
 
     bulletPool: {
         bulletArray: [],
@@ -28,8 +28,8 @@ playerShip = {
             for (var i = 0; i < this.initialSize; i++)
             {
                 var bullet = new createBullet();
+                bullet.Start();
                 bullet.index = i;
-                bullet.sprite = bulletImg;
                 this.bulletArray.push(bullet);
             }
         },
@@ -75,8 +75,8 @@ playerShip = {
             {
                 // all the bullets are active: create a new one
                 bullet = new createBullet();
+                bullet.Start();
                 bullet.index = this.bulletArray.length;
-                bullet.sprite = bulletImg;
                 this.bulletArray.push(bullet);
             }
 
@@ -109,8 +109,7 @@ playerShip = {
             x: 0,
             y: -this.img.width / 2 + bulletImg.width / 2
         }
-
-        cannonPositionTransformed = {
+        this.cannonPositionTransformed = {
             x: 0,
             y: -this.img.width / 2 + bulletImg.width / 2
         }
@@ -185,22 +184,19 @@ playerShip = {
         };
         this.rotation = Math.atan2(mouseShipVector.y, mouseShipVector.x);
 
-        // cannon rotation
-        this.cannonPositionTransformed = rotate (this.position, {x: this.position.x + 
-        this.cannonPosition.x, y: this.position.y + this.cannonPosition.y}, 
-        -this.rotation -Math.PI / 2); 
+        // cannon position transformation
+        this.cannonPositionTransformed = rotate(this.position, {x: this.position.x + this.cannonPosition.x, y: this.position.y + this.cannonPosition.y}, -this.rotation - PIH);
 
         // shooting
-        if ((input.isKeyPressed(KEY_SPACE) || input.isMousePressed()) && this.shotCadencyAux <= 0)
+        if ((input.isKeyPressed(KEY_SPACE) || input.isMousePressed()) &&
+            this.shotCadencyAux <= 0)
         {
             var bullet = this.bulletPool.EnableBullet();
             bullet.position.x = this.cannonPositionTransformed.x;
             bullet.position.y = this.cannonPositionTransformed.y;
             bullet.rotation = this.rotation;
-            bullet.velocity = 1000;   
-            bullet.active = true;       
-                 
-            
+            bullet.velocity = 1000;
+            bullet.active = true;
 
             // play the sfx
             this.laserSfx.currentTime = 0.22;
@@ -221,7 +217,7 @@ playerShip = {
         ctx.save();
 
         ctx.translate(this.position.x, this.position.y);
-        ctx.rotate(this.rotation + Math.PI / 2);
+        ctx.rotate(this.rotation + PIH);
 
         ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
         ctx.strokeStyle = 'red';
@@ -231,6 +227,12 @@ playerShip = {
         ctx.drawImage(this.img, -this.imgHalfWidth, -this.imgHalfHeight);
 
         ctx.restore();
+
+        // draw the cannon point
+        ctx.beginPath();
+        ctx.arc(this.cannonPositionTransformed.x, this.cannonPositionTransformed.y, 2, 0, PI2, false);
+        ctx.fillStyle = "green";
+        ctx.fill();
 
         // active bullets
         ctx.fillStyle = "white";
@@ -248,29 +250,31 @@ function createBullet()
     this.rotation = 0;
     this.velocity = 0;
     this.damage = 0;
-    this.sprite = null;    
+    this.sprite = null;
     this.spriteHalfWidth = 0;
     this.spriteHalfHeight = 0;
 }
 
-createBullet.prototype.Start = function()
+createBullet.prototype.Start = function ()
 {
     this.sprite = bulletImg;
-    this.spriteHalfHeight = this.sprite.height / 2;
-    this.spriteHalfWidth = this.sprite.width / 2;
+    this.spriteHalfWidth = bulletImg.width / 2;
+    this.spriteHalfHeight = bulletImg.height / 2;
 }
 
-createBullet.prototype.Update = function(deltaTime)
+createBullet.prototype.Update = function (deltaTime)
 {
     this.position.x += this.velocity * deltaTime * Math.cos(this.rotation);
     this.position.y += this.velocity * deltaTime * Math.sin(this.rotation);
-};
+}
 
 createBullet.prototype.Draw = function(ctx)
-{   
+{
     ctx.save();
+    
     ctx.translate(this.position.x, this.position.y);
-    ctx.rotate(this.rotation + Math.PI / 2);
-    ctx.drawImage(this.sprite, this.spriteHalfWidth, -this.spriteHalfHeight);
+    ctx.rotate(this.rotation + PIH);
+    ctx.drawImage(this.sprite, -this.spriteHalfWidth, -this.spriteHalfHeight);
+
     ctx.restore();
 };
