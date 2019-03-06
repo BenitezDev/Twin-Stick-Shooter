@@ -1,8 +1,7 @@
 
 class GameManager
 {
-    enemies = invaders;
-
+    
     constructor()
     {
         this.timeToCreateEnemy = 2; // seconds
@@ -37,7 +36,7 @@ class GameManager
                 0.5 * Math.random() // rotVelocity
             );
             invader.Start();
-            this.enemies.push(invader);
+            invaders.push(invader);
 
             // reset the counter
             this.timeToCreateEnemyAux = this.timeToCreateEnemy;
