@@ -25,24 +25,63 @@
     position: relative;
     padding: 20px 50px;
     margin: 80px auto;
-    background-color: rgba(137, 43, 226);
+    /*background-color: rgba(137, 43, 226);*/
+}
+#Resume{
+    width: 100%;
+    height: 30%;
+    background-color: chocolate;
+}
+
+#AudioMenu{
+    display: flex;
+     width: 100%;
+     height: 30%;
+     padding-top: 10px;
+     
+}
+
+#music{
+   margin-right: 10px;
+    width: 50%;
+    height: 100%;
+    background-color: aqua;
+}
+#sfx{
+    margin-left: 10px;
+    width: 50%;
+    height: 100%;
+    left: 100%;
+    background-color: green;
+}
+
+#NewGame{
+    margin-top:  10px;
+    width: 100%;
+    height: 30%;
+    background-color: chocolate;
 }
 
 
+.grow{
+    -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+        transition: transform 0.5s , box-shadow 0.5s;
+}
+.grow:hover
+{
+        -webkit-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+        transform: scale(1.1);
+}
 
 
+.border:hover
+{
 
-
-
-
-
-
-
-
-
-
-
-
+    box-shadow: inset 0 0 0 24px #53a7ea;
+}
 
 
 
