@@ -80,7 +80,7 @@
 .border:hover
 {
 
-    box-shadow: inset 0 0 0 24px #53a7ea;
+    box-shadow: inset 0 0 0 75px rgba(0, 0, 0, 0.1);
 }
 
 

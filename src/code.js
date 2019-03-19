@@ -66,6 +66,7 @@ if (canvas)
                     invaderImg2 = new Image();
                     invaderImg2.src = "./assets/ship3.png";
                     invaderImg2.onload = function () {
+                        
                         // start the game
                         Start();
 
@@ -81,6 +82,10 @@ if (canvas)
 function Start ()
 {
     console.log("Start");
+
+    // hide pause menu
+    var pauseMenu = document.getElementById('MenuPausa');
+    pauseMenu.style.visibility = 'hidden';
 
     // create the player ship
     playerShip.Start();
@@ -143,6 +148,20 @@ function Loop ()
 
 function Update (deltaTime)
 {
+    if(input.isKeyDown(KEY_SCAPE) && !gamePaused)
+    {
+        var pauseMenu = document.getElementById('MenuPausa');
+        pauseMenu.style.visibility = 'visible';
+        gamePaused = true;
+    }
+
+    if(input.isKeyDown(KEY_SCAPE) && gamePaused){
+        var pauseMenu = document.getElementById('MenuPausa');
+        pauseMenu.style.visibility = 'hidden';
+        gamePaused = false;
+    } 
+    
+    if(gamePaused) return;
     // Input
     if (input.isKeyPressed(KEY_0))
     {
