@@ -16,6 +16,11 @@ var time = 0,
 
 var gamePaused = false;
 
+var sfx = true;
+var music = true;
+
+var backgroundMusic = null;
+
 var gameMng;
 var playerShip;
 var stars;
@@ -83,6 +88,13 @@ function Start ()
 {
     console.log("Start");
 
+    sfx = true;
+    backgroundMusic = document.getElementById("background_music");
+    if(music)
+    {
+        backgroundMusic.play();
+    } 
+    CheckUIinput();
     // hide pause menu
     var pauseMenu = document.getElementById('MenuPausa');
     pauseMenu.style.visibility = 'hidden';
@@ -148,20 +160,24 @@ function Loop ()
 
 function Update (deltaTime)
 {
-    if(input.isKeyDown(KEY_SCAPE) && !gamePaused)
+    
+    if(input.isKeyPressed(KEY_SCAPE) && !gamePaused)
     {
         var pauseMenu = document.getElementById('MenuPausa');
         pauseMenu.style.visibility = 'visible';
         gamePaused = true;
     }
-
-    if(input.isKeyDown(KEY_SCAPE) && gamePaused){
+    else if(input.isKeyPressed(KEY_SCAPE) && gamePaused)
+    {
         var pauseMenu = document.getElementById('MenuPausa');
         pauseMenu.style.visibility = 'hidden';
         gamePaused = false;
-    } 
+    }
+
     
+
     if(gamePaused) return;
+
     // Input
     if (input.isKeyPressed(KEY_0))
     {
@@ -291,4 +307,43 @@ function rotate (origCoord, pointCoord, angle)
         x: (cos * (x - cx)) + (sin * (y - cy)) + cx,
         y: (cos * (y - cy)) - (sin * (x - cx)) + cy
     };
+}
+
+
+function CheckUIinput()
+{
+    //  RESUME
+    var resume = document.getElementById('Resume');
+    resume.onclick = function(){
+        var pauseMenu = document.getElementById('MenuPausa');
+        pauseMenu.style.visibility = 'hidden';
+        gamePaused = false;
+    }    
+
+    // NEW GAME
+    var reload = document.getElementById('NewGame');
+    reload.onclick = function(){
+        location.reload();
+    }
+
+    // SFX
+    var sfxButton = document.getElementById('sfx');
+    sfxButton.onclick = function(){
+        sfx = !sfx;   
+    }
+
+    // MUSIC
+    var musicButton = document.getElementById("music");
+    musicButton.onclick = function(){
+
+        music = !music;
+
+        if(music) backgroundMusic.play();
+        else backgroundMusic.pause();
+
+        
+    }
+    
+
+
 }

@@ -199,8 +199,15 @@ playerShip = {
             bullet.active = true;
 
             // play the sfx
-            this.laserSfx.currentTime = 0.22;
-            this.laserSfx.play();
+            console.log(sfx);
+            if(sfx)
+            {
+                this.laserSfx.currentTime = 0.22;
+                this.laserSfx.play();
+            }else{
+
+                console.log("NONONONO");
+            }
 
             // reset the cadency aux timer
             this.shotCadencyAux = this.shotCadency;

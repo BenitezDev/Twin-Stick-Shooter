@@ -11,7 +11,14 @@
 
     <div id="container">
         <canvas id="my_canvas" width="1280" height="720"></canvas>
-        <div id = "HUD">
+        <div id = "UI">
+            <div id = "HUD">
+                <div id = "hp_bar">
+                    
+                </div>
+            </div>
+
+            <!-- PAUSE -->
             <div id = "MenuPausa" >
                 <div id = "Resume" class="grow border">
                         <p>Resume</p>
@@ -19,7 +26,7 @@
 
                 <div id = "AudioMenu">
                     <div id = "music"class="grow border"> <p>Music</p></div>
-                    <div id = "sfx"class="grow border"> <p>SFX</p></div>
+                    <div id = "sfx" class="grow border"> <p>SFX</p></div>
                 </div>
 
                 <div id = "NewGame"class="grow border">
@@ -29,10 +36,12 @@
             
         </div>
         
+        
 
     </div>
 
     <audio id="laser" src="./assets/laser.wav" style="display: none;"></audio>
+    <audio id="background_music" src="./assets/background_music.wav" style="display: none;"></audio>
     
     <script src="./src/input.js"></script>
     <script src="./src/playership.js"></script>
