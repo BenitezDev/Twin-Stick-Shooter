@@ -22,11 +22,10 @@ playerShip = {
         bulletArray: [],
         initialSize: 3,
         bulletCount: 0,
-        
+
         Start: function () {
             this.bulletArray = [];
-            for (var i = 0; i < this.initialSize; i++)
-            {
+            for (var i = 0; i < this.initialSize; i++) {
                 var bullet = new createBullet();
                 bullet.Start();
                 bullet.index = i;
@@ -49,7 +48,7 @@ playerShip = {
         },
 
         Draw: function (ctx) {
-            this.bulletArray.forEach(function(bullet) {
+            this.bulletArray.forEach(function (bullet) {
                 if (bullet.active)
                     bullet.Draw(ctx);
             });
@@ -60,10 +59,8 @@ playerShip = {
             var bullet = null;
             var found = false;
             var i = 0;
-            while (!found && i < this.bulletArray.length)
-            {
-                if (!this.bulletArray[i].active)
-                {
+            while (!found && i < this.bulletArray.length) {
+                if (!this.bulletArray[i].active) {
                     found = true;
                     bullet = this.bulletArray[i];
                 }
@@ -71,8 +68,7 @@ playerShip = {
                     i++;
             }
 
-            if (!found)
-            {
+            if (!found) {
                 // all the bullets are active: create a new one
                 bullet = new createBullet();
                 bullet.Start();
@@ -124,41 +120,35 @@ playerShip = {
 
         var movement = { x: 0, y: 0 };
 
-        if (input.isKeyPressed(KEY_RIGHT) || input.isKeyPressed(KEY_D))
-        {
+        if (input.isKeyPressed(KEY_RIGHT) || input.isKeyPressed(KEY_D)) {
             // right displacement
             movement.x++;
         }
 
-        if (input.isKeyPressed(KEY_LEFT) || input.isKeyPressed(KEY_A))
-        {
+        if (input.isKeyPressed(KEY_LEFT) || input.isKeyPressed(KEY_A)) {
             // left displacement
             movement.x--;
         }
 
-        if (input.isKeyPressed(KEY_UP) || input.isKeyPressed(KEY_W))
-        {
+        if (input.isKeyPressed(KEY_UP) || input.isKeyPressed(KEY_W)) {
             // up displacement
             movement.y--;
         }
 
-        if (input.isKeyPressed(KEY_DOWN) || input.isKeyPressed(KEY_S))
-        {
+        if (input.isKeyPressed(KEY_DOWN) || input.isKeyPressed(KEY_S)) {
             // down displacement
             movement.y++;
         }
 
         // normalize the movement vector
         var movementModule = Math.sqrt((movement.x * movement.x) + (movement.y * movement.y));
-        if (movementModule != 0)
-        {
+        if (movementModule != 0) {
             movement.x = movement.x / movementModule;
             movement.y = movement.y / movementModule;
         }
 
         // turbo mode
-        if (input.isKeyPressed(KEY_LSHIFT))
-        {
+        if (input.isKeyPressed(KEY_LSHIFT)) {
             movement.x *= 2.0;
             movement.y *= 2.0;
         }
@@ -185,12 +175,11 @@ playerShip = {
         this.rotation = Math.atan2(mouseShipVector.y, mouseShipVector.x);
 
         // cannon position transformation
-        this.cannonPositionTransformed = rotate(this.position, {x: this.position.x + this.cannonPosition.x, y: this.position.y + this.cannonPosition.y}, -this.rotation - PIH);
+        this.cannonPositionTransformed = rotate(this.position, { x: this.position.x + this.cannonPosition.x, y: this.position.y + this.cannonPosition.y }, -this.rotation - PIH);
 
         // shooting
         if ((input.isKeyPressed(KEY_SPACE) || input.isMousePressed()) &&
-            this.shotCadencyAux <= 0)
-        {
+            this.shotCadencyAux <= 0) {
             var bullet = this.bulletPool.EnableBullet();
             bullet.position.x = this.cannonPositionTransformed.x;
             bullet.position.y = this.cannonPositionTransformed.y;
@@ -200,11 +189,10 @@ playerShip = {
 
             // play the sfx
             console.log(sfx);
-            if(sfx)
-            {
+            if (sfx) {
                 this.laserSfx.currentTime = 0.22;
                 this.laserSfx.play();
-            }else{
+            } else {
 
                 console.log("NONONONO");
             }
@@ -249,8 +237,7 @@ playerShip = {
     }
 };
 
-function createBullet()
-{
+function createBullet() {
     this.index = -1;
     this.active = false;
     this.position = { x: 0, y: 0 };
@@ -262,23 +249,20 @@ function createBullet()
     this.spriteHalfHeight = 0;
 }
 
-createBullet.prototype.Start = function ()
-{
+createBullet.prototype.Start = function () {
     this.sprite = bulletImg;
     this.spriteHalfWidth = bulletImg.width / 2;
     this.spriteHalfHeight = bulletImg.height / 2;
 }
 
-createBullet.prototype.Update = function (deltaTime)
-{
+createBullet.prototype.Update = function (deltaTime) {
     this.position.x += this.velocity * deltaTime * Math.cos(this.rotation);
     this.position.y += this.velocity * deltaTime * Math.sin(this.rotation);
 }
 
-createBullet.prototype.Draw = function(ctx)
-{
+createBullet.prototype.Draw = function (ctx) {
     ctx.save();
-    
+
     ctx.translate(this.position.x, this.position.y);
     ctx.rotate(this.rotation + PIH);
     ctx.drawImage(this.sprite, -this.spriteHalfWidth, -this.spriteHalfHeight);

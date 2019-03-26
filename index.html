@@ -12,25 +12,31 @@
     <div id="container">
         <canvas id="my_canvas" width="1280" height="720"></canvas>
         <div id = "UI">
+            <!-- HUD in game -->
             <div id = "HUD">
-                <div id = "hp_bar">
-                    
+                <!-- Health -->
+                <div id ="wrapperProgress">
+                    <div id ="hp_bar"></div>
+                </div>
+                <!-- Experience -->
+                <div id ="wrapperProgress">
+                    <div id ="exp_bar"></div>
                 </div>
             </div>
+
+            
 
             <!-- PAUSE -->
             <div id = "MenuPausa" >
                 <div id = "Resume" class="grow border">
-                        <p>Resume</p>
                 </div>
 
                 <div id = "AudioMenu">
-                    <div id = "music"class="grow border"> <p>Music</p></div>
-                    <div id = "sfx" class="grow border"> <p>SFX</p></div>
+                    <div id = "music"class="grow border"></div>
+                    <div id = "sfx" class="grow border"></div>
                 </div>
 
                 <div id = "NewGame"class="grow border">
-                    <p>NewGame</p>
                 </div>
             </div>
             
